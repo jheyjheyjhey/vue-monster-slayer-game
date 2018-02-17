@@ -18,7 +18,7 @@ new Vue({
             var dmg = this.calculateDmg(3, 10);
             this.enemyHp -= dmg;
             this.turns.unshift({
-                isPlayer: false,
+                isPlayer: true,
                 text: 'Player hits monster for ' + dmg + 'points'
             });            
             if (this.checkWinner()) {
@@ -32,7 +32,7 @@ new Vue({
             var dmg = this.calculateDmg(10, 20);
             this.enemyHp -= dmg;  
             this.turns.unshift({
-                isPlayer: false,
+                isPlayer: true,
                 text: 'Player hits monster hard for ' + dmg + 'points'
             });          
             if (this.checkWinner()) {
@@ -48,7 +48,7 @@ new Vue({
                 this.playerHp = 100;
 
             this.turns.unshift({
-                isPlayer: false,
+                isPlayer: true,
                 text: 'Player heals for 10 points' 
             });   
             this.enemyAtk();
@@ -90,8 +90,5 @@ new Vue({
             })
             this.checkWinner();
         }
-    },
-    computed: {
-
     }
 });
