@@ -14,20 +14,29 @@ new Vue({
         },
         // Regular Attack
         attack: function () {
-            this.enemyHp -= this.calculateDmg(3, 10);
-            
+            this.enemyHp -= this.calculateDmg(3, 10);            
             if (this.checkWinner()) {
                 return;
             }
 
-            this.playerHp -= this.calculateDmg(5, 12);
-            this.checkWinner();
+            this.enemyAtk();
+            
         },
         specialAtk: function () {
+            this.enemyHp -= this.calculateDmg(10, 20);            
+            if (this.checkWinner()) {
+                return;
+            }
 
+            this.enemyAtk();
         },
         heal: function () {
+            if (this.playerHp <= 90)
+                this.playerHp += 10;
+            else
+                this.playerHp = 100;
 
+            this.enemyAtk();
         },
         giveUp: function () {
 
@@ -38,12 +47,12 @@ new Vue({
         checkWinner: function () {
             if (this.enemyHp <= 0) {
                 if (confirm('Winner winner chicken dinner! Start a new game?')) {
-                    this.startGame();
+                    this.startGame();                    
                 }
                 else {
                     this.gameIsRunning = false;
                 }
-                return;
+                return true;
             }
             else if (this.playerHp <= 0){
                 if (confirm('You lost! :( Start a new game?')) {
@@ -55,6 +64,10 @@ new Vue({
                 return true;
             }
             return false;
+        },
+        enemyAtk: function () {
+            this.playerHp -= this.calculateDmg(5, 12);
+            this.checkWinner();
         }
     },
     computed: {
