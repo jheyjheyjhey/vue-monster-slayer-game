@@ -3,7 +3,8 @@ new Vue({
     data: {
         playerHp: 100,
         enemyHp: 100,
-        gameIsRunning: false
+        gameIsRunning: false,
+        turns: []
     },
     methods: {
         startGame: function () {
@@ -14,7 +15,12 @@ new Vue({
         },
         // Regular Attack
         attack: function () {
-            this.enemyHp -= this.calculateDmg(3, 10);            
+            var dmg = this.calculateDmg(3, 10);
+            this.enemyHp -= dmg;
+            this.turns.unshift({
+                isPlayer: false,
+                text: 'Player hits monster for ' + dmg + 'points'
+            });            
             if (this.checkWinner()) {
                 return;
             }
@@ -23,7 +29,12 @@ new Vue({
             
         },
         specialAtk: function () {
-            this.enemyHp -= this.calculateDmg(10, 20);            
+            var dmg = this.calculateDmg(10, 20);
+            this.enemyHp -= dmg;  
+            this.turns.unshift({
+                isPlayer: false,
+                text: 'Player hits monster hard for ' + dmg + 'points'
+            });          
             if (this.checkWinner()) {
                 return;
             }
@@ -36,10 +47,15 @@ new Vue({
             else
                 this.playerHp = 100;
 
+            this.turns.unshift({
+                isPlayer: false,
+                text: 'Player heals for 10 points' 
+            });   
             this.enemyAtk();
         },
         giveUp: function () {
-
+            alert("You gave up :(")
+            this.gameIsRunning = false;
         },
         calculateDmg: function (minDmg, maxDmg) {
             return Math.max(Math.floor(Math.random() * maxDmg) + 1, minDmg);
@@ -66,7 +82,12 @@ new Vue({
             return false;
         },
         enemyAtk: function () {
-            this.playerHp -= this.calculateDmg(5, 12);
+            var dmg = this.calculateDmg(5, 12);
+            this.playerHp -= dmg;
+            this.turns.unshift({
+                isPlayer: false,
+                text: 'Enemy hits you for '+ dmg + 'points'
+            })
             this.checkWinner();
         }
     },
