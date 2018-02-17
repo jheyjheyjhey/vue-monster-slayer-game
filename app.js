@@ -14,30 +14,14 @@ new Vue({
         },
         // Regular Attack
         attack: function () {
-            var maxDmg = 10;
-            var minDmg = 3;
-            // Set the damage randomly (Max damage is 10, min damage is 3)
-            var dmg = Math.max(Math.floor(Math.random() * maxDmg) + 1, minDmg);
-            this.enemyHp -= dmg;
-
-            if (this.enemyHp <= 0) {
-                alert('Winner winner chicken dinner!');
-                this.gameIsRunning = false;
+            this.enemyHp -= this.calculateDmg(3, 10);
+            
+            if (this.checkWinner()) {
                 return;
             }
 
-            max = 12;
-            min = 5;
-            dmg = Math.max(Math.floor(Math.random() * maxDmg) + 1, minDmg);
-            this.playerHp -= dmg;
-
-            if (this.playerHp <= 0) {
-                alert('You lost! :(');
-                this.gameIsRunning = false;
-                return;
-            }
-
-
+            this.playerHp -= this.calculateDmg(5, 12);
+            this.checkWinner();
         },
         specialAtk: function () {
 
@@ -47,6 +31,30 @@ new Vue({
         },
         giveUp: function () {
 
+        },
+        calculateDmg: function (minDmg, maxDmg) {
+            return Math.max(Math.floor(Math.random() * maxDmg) + 1, minDmg);
+        },
+        checkWinner: function () {
+            if (this.enemyHp <= 0) {
+                if (confirm('Winner winner chicken dinner! Start a new game?')) {
+                    this.startGame();
+                }
+                else {
+                    this.gameIsRunning = false;
+                }
+                return;
+            }
+            else if (this.playerHp <= 0){
+                if (confirm('You lost! :( Start a new game?')) {
+                    this.startGame();
+                }
+                else {
+                    this.gameIsRunning = false;
+                }
+                return true;
+            }
+            return false;
         }
     },
     computed: {
