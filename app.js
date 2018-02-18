@@ -12,6 +12,7 @@ new Vue({
             // Ensure the game resets on a new game
             this.playerHp = 100;
             this.enemyHp = 100;
+            this.turns = [];
         },
         // Regular Attack
         attack: function () {
@@ -56,27 +57,46 @@ new Vue({
         giveUp: function () {
             alert("You gave up :(")
             this.gameIsRunning = false;
+            this.turns = [];
         },
         calculateDmg: function (minDmg, maxDmg) {
             return Math.max(Math.floor(Math.random() * maxDmg) + 1, minDmg);
         },
         checkWinner: function () {
+            var vm = this;
             if (this.enemyHp <= 0) {
-                if (confirm('Winner winner chicken dinner! Start a new game?')) {
-                    this.startGame();                    
-                }
-                else {
-                    this.gameIsRunning = false;
-                }
+                this.enemyHp = 0;
+                this.turns.unshift({
+                    isPlayer: true,
+                    text: 'Enemy is knocked down! Congrats!' 
+                });   
+                setTimeout(function () {
+                    if (confirm('Winner winner chicken dinner! Start a new game?')) {
+                        vm.startGame();                    
+                    }
+                    else {
+                        vm.gameIsRunning = false;
+                    }
+                    return true;
+                }, 1000)
                 return true;
             }
             else if (this.playerHp <= 0){
-                if (confirm('You lost! :( Start a new game?')) {
-                    this.startGame();
-                }
-                else {
-                    this.gameIsRunning = false;
-                }
+                var vm = this;
+                this.playerHp = 0;
+                this.turns.unshift({
+                    isPlayer: true,
+                    text: 'You are knocked down!' 
+                });   
+                setTimeout(function () {
+                    if (confirm('You lost! :( Start a new game?')) {
+                        vm.startGame();
+                    }
+                    else {
+                        vm.gameIsRunning = false;
+                    }       
+                    return true;             
+                }, 1000);
                 return true;
             }
             return false;
